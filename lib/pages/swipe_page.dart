@@ -1,27 +1,25 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:match_it/classes/card_collection.dart';
 import 'package:match_it/classes/card_data.dart';
 import 'package:swipe_cards/swipe_cards.dart';
 
 class SwipePage extends StatelessWidget {
-  const SwipePage({super.key, required this.collection});
+  SwipePage({super.key, required this.collection}) {
+    _swipeItems = collection.cards
+        .map((card) => SwipeItem(content: card, likeAction: () => onLike(card)))
+        .toList();
+  }
 
   final CardCollection collection;
+  late List<SwipeItem> _swipeItems;
 
   void onLike(CardData cardData) {
     debugPrint("Liked: $cardData");
   }
 
-  List<SwipeItem> getSwipeItems() => collection.cards
-      .map((card) => SwipeItem(content: card, likeAction: () => onLike(card)))
-      .toList();
-
   @override
   Widget build(BuildContext context) {
-    final swipeItems = getSwipeItems();
-    final matchEngine = MatchEngine(swipeItems: swipeItems);
+    final matchEngine = MatchEngine(swipeItems: _swipeItems);
 
     return Scaffold(
       appBar: AppBar(
