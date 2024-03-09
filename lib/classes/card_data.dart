@@ -5,7 +5,7 @@ class CardData {
   final String? imageUrl;
   final String? description;
 
-  CardData({
+  const CardData({
     required this.name,
     this.imageUrl,
     this.description,
