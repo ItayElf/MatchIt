@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:match_it/classes/card_collection.dart';
 import 'package:match_it/classes/card_data.dart';
+import 'package:match_it/widgets/card_widget.dart';
 import 'package:swipe_cards/swipe_cards.dart';
 
+// ignore: must_be_immutable
 class SwipePage extends StatelessWidget {
   SwipePage({super.key, required this.collection}) {
     _swipeItems = collection.cards
@@ -32,10 +34,8 @@ class SwipePage extends StatelessWidget {
           Expanded(
             child: SwipeCards(
               matchEngine: matchEngine,
-              itemBuilder: (context, index) => Container(
-                color: Colors.red,
-                height: 200,
-                width: 200,
+              itemBuilder: (context, index) => CardWidget(
+                cardData: _swipeItems[index].content,
               ),
               onStackFinished: () {
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

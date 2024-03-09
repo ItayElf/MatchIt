@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   static const CardCollection collection = CardCollection(
     name: "Test Collection",
     cards: [
-      CardData(name: "Test Card"),
+      CardData(name: "Test Card 🍕", description: "This pizza is delicious!"),
     ],
   );
 
