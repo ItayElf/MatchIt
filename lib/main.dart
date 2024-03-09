@@ -3,9 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:match_it/classes/card_collection.dart';
 import 'package:match_it/classes/card_data.dart';
-import 'package:match_it/network/utils.dart';
+import 'package:match_it/network/server.dart';
 import 'package:match_it/pages/swipe_page.dart';
-import 'package:network_info_plus/network_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 void main() async {
@@ -18,12 +17,8 @@ void main() async {
     }
   }
 
-  final info = NetworkInfo();
-  final wifiName = await info.getWifiName();
-  final wifiIP = await info.getWifiIP();
-  final id = ipToHashId(wifiIP!);
-  debugPrint("IP: $wifiIP, Name: $wifiName");
-  debugPrint("ID: $id, decoded: ${hashIdToIp(id)}");
+  final server = Server(onError: (e) => {print(e)}, onCardData: (c) {});
+  server.start();
   runApp(const MyApp());
 }
 
