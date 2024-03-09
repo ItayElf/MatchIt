@@ -1,9 +1,26 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:match_it/classes/card_collection.dart';
 import 'package:match_it/classes/card_data.dart';
 import 'package:match_it/pages/swipe_page.dart';
+import 'package:network_info_plus/network_info_plus.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  if (Platform.isAndroid) {
+    final status = await Permission.location.status;
+    if (status.isDenied || status.isRestricted) {
+      await Permission.location.request();
+    }
+  }
+
+  final info = NetworkInfo();
+  final wifiName = await info.getWifiName();
+  final wifiIP = await info.getWifiIP();
+  debugPrint("IP: $wifiIP, Name: $wifiName");
   runApp(const MyApp());
 }
 
