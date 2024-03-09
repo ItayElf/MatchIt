@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:match_it/classes/card_data.dart';
 
@@ -31,7 +32,7 @@ class _ImageCard extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(12)),
             image: DecorationImage(
-              image: NetworkImage(cardData.imageUrl!),
+              image: CachedNetworkImageProvider(cardData.imageUrl!),
               fit: BoxFit.cover,
             ),
           ),
