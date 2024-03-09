@@ -8,6 +8,56 @@ class CardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (cardData.imageUrl != null) {
+      return Padding(
+        padding: const EdgeInsets.all(32),
+        child: Center(
+          child: Container(
+            width: MediaQuery.of(context).size.width - 40,
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(12)),
+              image: DecorationImage(
+                image: NetworkImage(cardData.imageUrl!),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                gradient: LinearGradient(
+                  colors: [Colors.transparent, Colors.black],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  stops: [0.7, 1],
+                ),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  FittedBox(
+                    child: Text(
+                      cardData.name,
+                      style: const TextStyle(fontSize: 40, color: Colors.white),
+                    ),
+                  ),
+                  if (cardData.description != null)
+                    Text(
+                      cardData.description!,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        color: Colors.white70,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
     return Padding(
       padding: const EdgeInsets.all(32),
       child: Center(
