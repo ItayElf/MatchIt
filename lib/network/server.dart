@@ -5,13 +5,14 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:match_it/classes/card_data.dart';
+import 'package:match_it/classes/message.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 
 class Server {
-  Server({required this.onError, required this.onCardData});
+  Server({required this.onError, required this.onLikedCard});
 
   final void Function(String errorMessage) onError;
-  final void Function(CardData cardData) onCardData;
+  final void Function(CardData cardData) onLikedCard;
 
   final List<Socket> sockets = [];
   ServerSocket? server;
@@ -42,7 +43,12 @@ class Server {
   }
 
   void broadcastChoice(CardData cardData) async {
-    final encoded = cardData.toJson();
+    final message = Message(type: "choice", content: cardData.toMap());
+    _broadcast(message);
+  }
+
+  void _broadcast(Message message) async {
+    final encoded = message.toJson();
     debugPrint("SERVER SENDING: $encoded");
     for (final socket in sockets) {
       socket.write(Uint8List.fromList(encoded.codeUnits));
@@ -62,6 +68,9 @@ class Server {
 
   void _onData(String data) {
     debugPrint("SERVER GOT: $data");
-    onCardData(CardData.fromJson(data));
+    final message = Message.fromJson(data);
+    if (message.type == "liked") {
+      onLikedCard(CardData.fromJson(data));
+    }
   }
 }
