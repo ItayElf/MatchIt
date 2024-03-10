@@ -18,7 +18,7 @@ class CardWidget extends StatelessWidget {
 }
 
 class _ImageCard extends StatelessWidget {
-  const _ImageCard({super.key, required this.cardData});
+  const _ImageCard({required this.cardData});
 
   final CardData cardData;
 
@@ -75,7 +75,7 @@ class _ImageCard extends StatelessWidget {
 }
 
 class _TextCard extends StatelessWidget {
-  const _TextCard({super.key, required this.cardData});
+  const _TextCard({required this.cardData});
 
   final CardData cardData;
 
