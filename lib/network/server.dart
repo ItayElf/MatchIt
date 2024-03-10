@@ -17,6 +17,7 @@ class Server {
   final List<Socket> sockets = [];
   ServerSocket? server;
   bool isRunning = false;
+  StreamSubscription<Socket>? listenSubscription;
 
   void start() async {
     runZonedGuarded(
@@ -29,16 +30,22 @@ class Server {
         server = await ServerSocket.bind(ipAddress, 1664);
         debugPrint("SERVER STARTS ON $ipAddress:1664");
         isRunning = true;
-        server!.listen(onRequest);
+        listenSubscription = server!.listen(onRequest);
       },
       (obj, stack) => onError(obj.toString()),
     );
   }
 
+  Future<void> lock() async {
+    await listenSubscription?.cancel();
+  }
+
   void stop() async {
+    await lock();
     await server?.close();
     server = null;
     isRunning = false;
+    listenSubscription = null;
     sockets.clear();
   }
 
