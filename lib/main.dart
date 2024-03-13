@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:match_it/classes/card_collection.dart';
 import 'package:match_it/classes/card_data.dart';
 import 'package:match_it/network/server.dart';
-import 'package:match_it/pages/swipe_page.dart';
+import 'package:match_it/widgets/async_button.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 void main() async {
@@ -56,14 +56,24 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'MatchIt!',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
-      ),
-      home: const SwipePage(
-        collection: collection,
-      ),
-    );
+        title: 'MatchIt!',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+          useMaterial3: true,
+        ),
+        home: Scaffold(
+          appBar: AppBar(),
+          body: AsyncButton(
+            loadingCircleSize: 100,
+            loadingCircleWidth: 10,
+            child: const Text(
+              "Hello there!",
+              style: TextStyle(fontSize: 48),
+            ),
+            onClick: () => Future.delayed(
+              Durations.extralong4,
+            ),
+          ),
+        ));
   }
 }
