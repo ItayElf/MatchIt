@@ -36,34 +36,7 @@ class _SwipePageState extends State<SwipePage> {
 
     final Widget body;
     if (isFinished) {
-      body = const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.hourglass_empty,
-              size: 72,
-              color: Colors.black54,
-            ),
-            Text(
-              "You are done!",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 48,
-                color: Colors.black54,
-              ),
-            ),
-            Text(
-              "Waiting for your friends to decide...",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.black54,
-              ),
-            )
-          ],
-        ),
-      );
+      body = const _WaitScreen();
     } else {
       body = Column(
         children: [
@@ -107,6 +80,42 @@ class _SwipePageState extends State<SwipePage> {
         centerTitle: true,
       ),
       body: body,
+    );
+  }
+}
+
+class _WaitScreen extends StatelessWidget {
+  const _WaitScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.hourglass_empty,
+            size: 72,
+            color: Colors.black54,
+          ),
+          Text(
+            "You are done!",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 48,
+              color: Colors.black54,
+            ),
+          ),
+          Text(
+            "Waiting for your friends to decide...",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.black54,
+            ),
+          )
+        ],
+      ),
     );
   }
 }
