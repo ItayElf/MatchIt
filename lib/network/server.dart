@@ -9,30 +9,65 @@ import 'package:match_it/classes/message.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 
 class Server {
-  Server({required this.onError, required this.onLikedCard});
+  Server();
 
-  final void Function(String errorMessage) onError;
-  final void Function(CardData cardData) onLikedCard;
+  void Function(String errorMessage)? _onError;
+  void Function(CardData cardData)? _onLikedCard;
 
   final List<Socket> sockets = [];
   ServerSocket? server;
   bool isRunning = false;
   StreamSubscription<Socket>? listenSubscription;
 
+  void broadcastChoice(CardData cardData) async {
+    final message = Message(type: "choice", content: cardData.toMap());
+    _broadcast(message);
+  }
+
+  void _onRequest(Socket socket) {
+    debugPrint("GOT CONNECTION FROM ${socket.remoteAddress.address}");
+    if (!sockets.contains(socket)) {
+      sockets.add(socket);
+    }
+    socket.listen((data) {
+      _onData(utf8.decode(data));
+    });
+  }
+
+  void _onData(String data) {
+    debugPrint("SERVER GOT: $data");
+    final message = Message.fromJson(data);
+    if (message.type == "liked" && _onLikedCard != null) {
+      _onLikedCard!(CardData.fromJson(data));
+    }
+  }
+
+  // Setters
+
+  void onError(void Function(String errorMessage) function) {
+    _onError = function;
+  }
+
+  void onLikedCard(void Function(CardData cardData) function) {
+    _onLikedCard = function;
+  }
+
+  // Low level networking
+
   void start() async {
     runZonedGuarded(
       () async {
         final info = NetworkInfo();
         final ipAddress = await info.getWifiIP();
-        if (ipAddress == null) {
-          return onError("No ip address was found!");
+        if (ipAddress == null && _onError != null) {
+          return _onError!("No ip address was found!");
         }
         server = await ServerSocket.bind(ipAddress, 1664);
         debugPrint("SERVER STARTS ON $ipAddress:1664");
         isRunning = true;
-        listenSubscription = server!.listen(onRequest);
+        listenSubscription = server!.listen(_onRequest);
       },
-      (obj, stack) => onError(obj.toString()),
+      (obj, stack) => _onError != null ? _onError!(obj.toString()) : null,
     );
   }
 
@@ -49,11 +84,6 @@ class Server {
     sockets.clear();
   }
 
-  void broadcastChoice(CardData cardData) async {
-    final message = Message(type: "choice", content: cardData.toMap());
-    _broadcast(message);
-  }
-
   void _broadcast(Message message) async {
     final encoded = message.toJson();
     debugPrint("SERVER SENDING: $encoded");
@@ -61,23 +91,5 @@ class Server {
       socket.write(Uint8List.fromList(encoded.codeUnits));
     }
     await Future.wait(sockets.map((e) => e.flush()));
-  }
-
-  void onRequest(Socket socket) {
-    debugPrint("GOT CONNECTION FROM ${socket.remoteAddress.address}");
-    if (!sockets.contains(socket)) {
-      sockets.add(socket);
-    }
-    socket.listen((data) {
-      _onData(utf8.decode(data));
-    });
-  }
-
-  void _onData(String data) {
-    debugPrint("SERVER GOT: $data");
-    final message = Message.fromJson(data);
-    if (message.type == "liked") {
-      onLikedCard(CardData.fromJson(data));
-    }
   }
 }

@@ -17,7 +17,7 @@ void main() async {
     }
   }
 
-  final server = Server(onError: (e) => {print(e)}, onLikedCard: (c) {});
+  final server = Server();
   server.start();
   runApp(const MyApp());
 }
