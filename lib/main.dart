@@ -1,24 +1,10 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:match_it/classes/card_collection.dart';
 import 'package:match_it/classes/card_data.dart';
-import 'package:match_it/network/server.dart';
-import 'package:match_it/widgets/async_button.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:match_it/pages/host_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  if (Platform.isAndroid) {
-    final status = await Permission.location.status;
-    if (status.isDenied || status.isRestricted) {
-      await Permission.location.request();
-    }
-  }
-
-  final server = Server();
-  server.start();
   runApp(const MyApp());
 }
 
@@ -61,19 +47,8 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
           useMaterial3: true,
         ),
-        home: Scaffold(
-          appBar: AppBar(),
-          body: AsyncButton(
-            loadingCircleSize: 100,
-            loadingCircleWidth: 10,
-            child: const Text(
-              "Hello there!",
-              style: TextStyle(fontSize: 48),
-            ),
-            onClick: () => Future.delayed(
-              Durations.extralong4,
-            ),
-          ),
+        home: const HostPage(
+          collection: collection,
         ));
   }
 }

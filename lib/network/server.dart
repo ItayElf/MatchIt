@@ -13,6 +13,7 @@ class Server {
 
   void Function(String errorMessage)? _onError;
   void Function(CardData cardData)? _onLikedCard;
+  void Function()? _onJoin;
 
   final List<Socket> sockets = [];
   ServerSocket? server;
@@ -28,6 +29,9 @@ class Server {
     debugPrint("GOT CONNECTION FROM ${socket.remoteAddress.address}");
     if (!sockets.contains(socket)) {
       sockets.add(socket);
+      if (_onJoin != null) {
+        _onJoin!();
+      }
     }
     socket.listen((data) {
       _onData(utf8.decode(data));
@@ -50,6 +54,10 @@ class Server {
 
   void onLikedCard(void Function(CardData cardData) function) {
     _onLikedCard = function;
+  }
+
+  void onJoin(void Function() function) {
+    _onJoin = function;
   }
 
   // Low level networking
