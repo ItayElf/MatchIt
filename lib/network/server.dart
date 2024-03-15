@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:match_it/classes/card_collection.dart';
 import 'package:match_it/classes/card_data.dart';
 import 'package:match_it/classes/message.dart';
+import 'package:match_it/network/utils.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 
 class Server {
@@ -75,7 +76,7 @@ class Server {
         if (ipAddress == null && _onError != null) {
           return _onError!("No ip address was found!");
         }
-        server = await ServerSocket.bind(ipAddress, 1664);
+        server = await ServerSocket.bind(ipAddress, appPortNumber);
         debugPrint("SERVER STARTS ON $ipAddress:1664");
         isRunning = true;
         listenSubscription = server!.listen(_onRequest);

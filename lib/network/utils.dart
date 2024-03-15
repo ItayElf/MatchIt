@@ -1,5 +1,7 @@
 import 'package:hashids2/hashids2.dart';
 
+const appPortNumber = 1664;
+
 int ipToNumber(String ip) {
   int number = 0;
   ip.split(".").forEach((element) {
