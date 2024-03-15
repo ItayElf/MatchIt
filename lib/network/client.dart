@@ -12,6 +12,7 @@ class Client {
   void Function(String errorMessage)? _onError;
   void Function(CardCollection collection)? _onCollection;
   void Function(CardData cardData)? _onFinalChoice;
+  void Function()? _onConnected;
 
   Socket? socket;
 
@@ -33,6 +34,10 @@ class Client {
     _onFinalChoice = function;
   }
 
+  void onConnected(void Function()? function) {
+    _onConnected = function;
+  }
+
   void _onData(String data) {
     debugPrint("CLIENT GOT: $data");
     final message = Message.fromJson(data);
@@ -46,8 +51,12 @@ class Client {
   Future connect(String ip) async {
     try {
       socket = await Socket.connect(ip, appPortNumber);
-      socket!.listen((event) => _onData(String.fromCharCodes(event)),
-          onError: _onError, onDone: disconnect);
+      socket!.listen(
+        (event) => _onData(String.fromCharCodes(event)),
+        onError: _onError,
+        onDone: disconnect,
+      );
+      if (_onConnected != null) _onConnected!();
     } on Exception catch (error) {
       _onError != null ? _onError!(error.toString()) : () => {};
     }
