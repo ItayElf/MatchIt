@@ -6,9 +6,10 @@ import 'package:swipe_cards/swipe_cards.dart';
 
 // ignore: must_be_immutable
 class SwipePage extends StatefulWidget {
-  const SwipePage({super.key, required this.collection});
+  const SwipePage({super.key, required this.collection, required this.onLike});
 
   final CardCollection collection;
+  final void Function(CardData) onLike;
 
   @override
   State<SwipePage> createState() => _SwipePageState();
@@ -18,15 +19,12 @@ class _SwipePageState extends State<SwipePage> {
   late List<SwipeItem> _swipeItems;
   bool isFinished = false;
 
-  void onLike(CardData cardData) {
-    debugPrint("Liked: $cardData");
-  }
-
   @override
   void initState() {
     super.initState();
     _swipeItems = widget.collection.cards
-        .map((card) => SwipeItem(content: card, likeAction: () => onLike(card)))
+        .map((card) =>
+            SwipeItem(content: card, likeAction: () => widget.onLike(card)))
         .toList();
   }
 

@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:match_it/classes/card_collection.dart';
 import 'package:match_it/network/server.dart';
 import 'package:match_it/network/utils.dart';
+import 'package:match_it/pages/server_swipe_page.dart';
 import 'package:match_it/widgets/async_button.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -63,9 +64,17 @@ class _HostPageState extends State<HostPage> {
     });
   }
 
-  Future onStart() async {
+  Future onStart(BuildContext context) async {
     await server.lock();
     await server.broadcastCollection(widget.collection);
+    if (context.mounted) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) =>
+              ServerSwipePage(collection: widget.collection, server: server),
+        ),
+      );
+    }
   }
 
   @override
@@ -116,7 +125,7 @@ class _HostPageState extends State<HostPage> {
               Container(
                 margin: const EdgeInsets.only(bottom: 40),
                 child: AsyncButton(
-                    onClick: onStart,
+                    onClick: () => onStart(context),
                     child: const Text(
                       "Start!",
                       style: TextStyle(fontSize: 48),

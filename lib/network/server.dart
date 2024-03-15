@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:match_it/classes/card_collection.dart';
@@ -48,21 +47,21 @@ class Server {
     debugPrint("SERVER GOT: $data");
     final message = Message.fromJson(data);
     if (message.type == "liked" && _onLikedCard != null) {
-      _onLikedCard!(CardData.fromJson(data));
+      _onLikedCard!(CardData.fromMap(message.content));
     }
   }
 
   // Setters
 
-  void onError(void Function(String errorMessage) function) {
+  void onError(void Function(String errorMessage)? function) {
     _onError = function;
   }
 
-  void onLikedCard(void Function(CardData cardData) function) {
+  void onLikedCard(void Function(CardData cardData)? function) {
     _onLikedCard = function;
   }
 
-  void onJoin(void Function() function) {
+  void onJoin(void Function()? function) {
     _onJoin = function;
   }
 
@@ -85,17 +84,19 @@ class Server {
     );
   }
 
-  Future<void> lock() async {
+  Future lock() async {
     await listenSubscription?.cancel();
+    debugPrint("Server locked");
   }
 
-  void stop() async {
+  Future stop() async {
     await lock();
     await server?.close();
     server = null;
     isRunning = false;
     listenSubscription = null;
     sockets.clear();
+    debugPrint("Server closed");
   }
 
   Future _broadcast(Message message) async {
