@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:match_it/classes/card_collection.dart';
 import 'package:match_it/classes/card_data.dart';
 import 'package:match_it/network/server.dart';
+import 'package:match_it/pages/choice_page.dart';
 import 'package:match_it/pages/swipe_page.dart';
 
 class ServerSwipePage extends StatefulWidget {
@@ -51,6 +52,11 @@ class _ServerSwipePageState extends State<ServerSwipePage> {
     likedCards.clear();
     await widget.server.broadcastChoice(winner);
     await widget.server.stop();
+    if (context.mounted) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => ChoicePage(choice: winner)),
+      );
+    }
   }
 
   @override

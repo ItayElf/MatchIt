@@ -68,7 +68,7 @@ class _HostPageState extends State<HostPage> {
     await server.lock();
     await server.broadcastCollection(widget.collection);
     if (context.mounted) {
-      Navigator.of(context).push(
+      Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) =>
               ServerSwipePage(collection: widget.collection, server: server),
