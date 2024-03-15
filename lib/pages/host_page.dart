@@ -65,6 +65,7 @@ class _HostPageState extends State<HostPage> {
 
   Future onStart() async {
     await server.lock();
+    await server.broadcastCollection(widget.collection);
   }
 
   @override

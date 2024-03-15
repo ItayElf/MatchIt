@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:match_it/classes/card_collection.dart';
 import 'package:match_it/classes/card_data.dart';
 import 'package:match_it/classes/message.dart';
 import 'package:network_info_plus/network_info_plus.dart';
@@ -20,9 +21,14 @@ class Server {
   bool isRunning = false;
   StreamSubscription<Socket>? listenSubscription;
 
-  void broadcastChoice(CardData cardData) async {
+  Future broadcastChoice(CardData cardData) async {
     final message = Message(type: "choice", content: cardData.toMap());
-    _broadcast(message);
+    return _broadcast(message);
+  }
+
+  Future broadcastCollection(CardCollection collection) async {
+    final message = Message(type: "collection", content: collection.toMap());
+    return _broadcast(message);
   }
 
   void _onRequest(Socket socket) {
@@ -92,12 +98,12 @@ class Server {
     sockets.clear();
   }
 
-  void _broadcast(Message message) async {
+  Future _broadcast(Message message) async {
     final encoded = message.toJson();
     debugPrint("SERVER SENDING: $encoded");
     for (final socket in sockets) {
-      socket.write(Uint8List.fromList(encoded.codeUnits));
+      socket.write(encoded);
     }
-    await Future.wait(sockets.map((e) => e.flush()));
+    return Future.wait(sockets.map((e) => e.flush()));
   }
 }
