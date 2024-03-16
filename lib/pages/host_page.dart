@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:match_it/classes/card_collection.dart';
 import 'package:match_it/network/server.dart';
 import 'package:match_it/network/utils.dart';
@@ -80,8 +79,9 @@ class _HostPageState extends State<HostPage> {
   @override
   Widget build(BuildContext context) {
     server.onError(
-      (error) => ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(error))),
+      (error) => ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(error)),
+      ),
     );
 
     return Scaffold(
@@ -99,7 +99,7 @@ class _HostPageState extends State<HostPage> {
                 child: Column(
                   children: [
                     const Text(
-                      "Code to join:",
+                      "Code to Join:",
                       style: TextStyle(fontSize: 36),
                       textAlign: TextAlign.center,
                     ),
@@ -125,11 +125,12 @@ class _HostPageState extends State<HostPage> {
               Container(
                 margin: const EdgeInsets.only(bottom: 40),
                 child: AsyncButton(
-                    onClick: () => onStart(context),
-                    child: const Text(
-                      "Start!",
-                      style: TextStyle(fontSize: 48),
-                    )),
+                  onClick: () => onStart(context),
+                  child: const Text(
+                    "Start!",
+                    style: TextStyle(fontSize: 48),
+                  ),
+                ),
               )
             ],
           ),

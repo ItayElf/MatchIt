@@ -50,13 +50,23 @@ class Client {
 
   Future connect(String ip) async {
     try {
-      socket = await Socket.connect(ip, appPortNumber);
+      socket = await Socket.connect(
+        ip,
+        appPortNumber,
+        timeout: const Duration(seconds: 5),
+      );
       socket!.listen(
         (event) => _onData(String.fromCharCodes(event)),
-        onError: _onError,
+        onError: (error) =>
+            _onError != null ? _onError!(error.toString()) : null,
         onDone: disconnect,
       );
       if (_onConnected != null) _onConnected!();
+    } on SocketException catch (error) {
+      _onError != null
+          ? _onError!(
+              "Could not connect to host! Make sure you are in the same WIFI")
+          : () => {};
     } on Exception catch (error) {
       _onError != null ? _onError!(error.toString()) : () => {};
     }

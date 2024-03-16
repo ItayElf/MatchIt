@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:match_it/classes/card_collection.dart';
 import 'package:match_it/classes/card_data.dart';
-import 'package:match_it/pages/host_page.dart';
+import 'package:match_it/pages/join_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,13 +42,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'MatchIt!',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-          useMaterial3: true,
-        ),
-        home: const HostPage(
-          collection: collection,
-        ));
+      title: 'MatchIt!',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        useMaterial3: true,
+      ),
+      home: const JoinPage(),
+    );
   }
 }
