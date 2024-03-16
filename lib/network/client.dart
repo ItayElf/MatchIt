@@ -62,7 +62,7 @@ class Client {
         onDone: disconnect,
       );
       if (_onConnected != null) _onConnected!();
-    } on SocketException catch (error) {
+    } on SocketException {
       _onError != null
           ? _onError!(
               "Could not connect to host! Make sure you are in the same WIFI")

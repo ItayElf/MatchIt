@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:match_it/network/client.dart';
 import 'package:match_it/network/utils.dart';
+import 'package:match_it/pages/client_swipe_page.dart';
 import 'package:match_it/widgets/async_button.dart';
 
 class JoinPage extends StatefulWidget {
@@ -56,8 +57,14 @@ class _JoinPageState extends State<JoinPage> {
       ),
     );
 
-    debugPrint(ipToHashId("192.168.68.51"));
-    debugPrint("isConnected=$isConnected");
+    client.onCollection(
+      (collection) => Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) =>
+              ClientSwipePage(collection: collection, client: client),
+        ),
+      ),
+    );
 
     return Scaffold(
       appBar: AppBar(

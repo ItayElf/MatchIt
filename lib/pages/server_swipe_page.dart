@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:match_it/classes/card_collection.dart';
 import 'package:match_it/classes/card_data.dart';
 import 'package:match_it/network/server.dart';

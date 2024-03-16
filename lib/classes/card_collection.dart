@@ -34,8 +34,8 @@ class CardCollection {
     return CardCollection(
       name: map['name'] as String,
       cards: List<CardData>.from(
-        (map['cards'] as List<int>).map<CardData>(
-          (x) => CardData.fromMap(x as Map<String, dynamic>),
+        (map['cards']).map(
+          (x) => CardData.fromMap(x),
         ),
       ),
     );
